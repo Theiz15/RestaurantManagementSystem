@@ -14,7 +14,7 @@ namespace RestaurantManagementSystem.Models
         [Required]
         [MaxLength(50)]
         [Column("table_number")]
-        public string TableNumber { get; set; }
+        public string? TableNumber { get; set; }
 
         [Column("capacity")]
         public int Capacity { get; set; }
@@ -25,9 +25,9 @@ namespace RestaurantManagementSystem.Models
 
         [MaxLength(255)]
         [Column("location")]
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
-        public ICollection<OrderTable> OrderTables { get; set; }
-        public ICollection<Reservation> Reservations { get; set; }
+        public ICollection<OrderTable>? OrderTables { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
     }
 }

@@ -29,9 +29,9 @@ namespace RestaurantManagementSystem.Models
         public decimal HoursWorked { get; set; }
 
         [ForeignKey("ShiftId")]
-        public Shift Shift { get; set; }
+        public Shift? Shift { get; set; }
 
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

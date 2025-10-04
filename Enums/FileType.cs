@@ -2,7 +2,7 @@
 {
     public enum FileType
     {
-        AVARTAR,
+        AVATAR,
         IMAGE
     }
 }

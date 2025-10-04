@@ -26,7 +26,7 @@ namespace RestaurantManagementSystem.Models
         [Column("added_at")]
         public DateTime AddedAt { get; set; }
 
-        public Order Order { get; set; }
-        public MenuItem MenuItem { get; set; }
+        public Order? Order { get; set; }
+        public MenuItem? MenuItem { get; set; }
     }
 }

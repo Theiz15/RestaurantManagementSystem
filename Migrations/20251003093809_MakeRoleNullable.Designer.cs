@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using RestaurantManagementSystem.Data;
 namespace RestaurantManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251003093809_MakeRoleNullable")]
+    partial class MakeRoleNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +35,6 @@ namespace RestaurantManagementSystem.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("description");
 
@@ -44,7 +46,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("categories", (string)null);
+                    b.ToTable("categories");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.FileUpload", b =>
@@ -66,7 +68,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("file_type");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("location");
 
@@ -75,7 +76,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("menu_item_id");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("name");
 
@@ -90,7 +90,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("MenuItemId");
 
-                    b.ToTable("file_uploads", (string)null);
+                    b.ToTable("file_uploads");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Inventory", b =>
@@ -132,7 +132,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("MenuItemId");
 
-                    b.ToTable("inventories", (string)null);
+                    b.ToTable("inventories");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.InventoryTransaction", b =>
@@ -165,7 +165,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("InventoryId");
 
-                    b.ToTable("inventory_transaction", (string)null);
+                    b.ToTable("inventory_transaction");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.MenuItem", b =>
@@ -186,7 +186,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -208,7 +207,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("menu_items", (string)null);
+                    b.ToTable("menu_items");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Order", b =>
@@ -258,7 +257,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("orders", (string)null);
+                    b.ToTable("orders");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.OrderItem", b =>
@@ -296,7 +295,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("order_items", (string)null);
+                    b.ToTable("order_items");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.OrderPromotion", b =>
@@ -321,7 +320,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("PromotionId");
 
-                    b.ToTable("order_promotions", (string)null);
+                    b.ToTable("order_promotions");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.OrderTable", b =>
@@ -342,7 +341,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("TableId");
 
-                    b.ToTable("Order_Tables", (string)null);
+                    b.ToTable("Order_Tables");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Payment", b =>
@@ -382,7 +381,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Promotion", b =>
@@ -401,7 +400,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("code");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -428,7 +426,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promotions", (string)null);
+                    b.ToTable("Promotions");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Reservation", b =>
@@ -476,7 +474,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("TableId");
 
-                    b.ToTable("reservations", (string)null);
+                    b.ToTable("reservations");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Role", b =>
@@ -496,7 +494,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("roles", (string)null);
+                    b.ToTable("roles");
 
                     b.HasData(
                         new
@@ -553,7 +551,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("shifts", (string)null);
+                    b.ToTable("shifts");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.ShiftAssignment", b =>
@@ -595,7 +593,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("shift_assignment", (string)null);
+                    b.ToTable("shift_assignment");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Table", b =>
@@ -612,7 +610,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("capacity");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("location");
@@ -631,7 +628,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("tables", (string)null);
+                    b.ToTable("tables");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.User", b =>
@@ -648,7 +645,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("email");
@@ -671,7 +667,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("phone");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int")
                         .HasColumnName("role_id");
 
@@ -689,7 +685,7 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.FileUpload", b =>
@@ -811,7 +807,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasForeignKey("CashierId");
 
                     b.HasOne("RestaurantManagementSystem.Models.Order", "Order")
-                        .WithMany("Payments")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -863,9 +859,7 @@ namespace RestaurantManagementSystem.Migrations
                 {
                     b.HasOne("RestaurantManagementSystem.Models.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
                 });
@@ -896,8 +890,6 @@ namespace RestaurantManagementSystem.Migrations
                     b.Navigation("OrderPromotions");
 
                     b.Navigation("OrderTables");
-
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Promotion", b =>

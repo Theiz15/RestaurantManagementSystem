@@ -6,8 +6,8 @@ public class ApiResponse<T>
     public int Code { get; set; } = 1000;
 
     [JsonPropertyName("message")]
-    public string Message { get; set; }
+    public string? Message { get; set; }
 
     [JsonPropertyName("result")]
-    public T Result { get; set; }
+    public T? Result { get; set; }
 }
