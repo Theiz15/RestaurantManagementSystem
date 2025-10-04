@@ -6,26 +6,29 @@ namespace RestaurantManagementSystem.DTOs
     {
         [Required(ErrorMessage = "Username is required.")]
         [MaxLength(100)]
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         [Required(ErrorMessage = "Password is required.")]
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
         [MaxLength(255)]
-        public string Password { get; set; }
+        public string? Password { get; set; }
+
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
+        public string? ConfirmPassword { get; set; }
 
         [MaxLength(255)]
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress]
         [MaxLength(255)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Phone]
         [MaxLength(20)]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
-        [Required]
-        public int RoleId { get; set; }
+        // [Required(ErrorMessage = "Role ID is required.")]
+        // public int RoleId { get; set; }
     }
 }

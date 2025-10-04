@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantManagementSystem.Data;
 
@@ -12,11 +11,9 @@ using RestaurantManagementSystem.Data;
 namespace RestaurantManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250926164331_InitialCreate")]
-    partial class InitialCreate
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,7 +32,6 @@ namespace RestaurantManagementSystem.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("description");
 
@@ -69,7 +65,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("file_type");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("location");
 
@@ -78,7 +73,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("menu_item_id");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("name");
 
@@ -189,7 +183,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -404,7 +397,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("code");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -615,7 +607,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("capacity");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("location");
@@ -651,7 +642,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("email");
@@ -674,7 +664,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("phone");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int")
                         .HasColumnName("role_id");
 
@@ -814,7 +804,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasForeignKey("CashierId");
 
                     b.HasOne("RestaurantManagementSystem.Models.Order", "Order")
-                        .WithMany("Payments")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -866,9 +856,7 @@ namespace RestaurantManagementSystem.Migrations
                 {
                     b.HasOne("RestaurantManagementSystem.Models.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
                 });
@@ -899,8 +887,6 @@ namespace RestaurantManagementSystem.Migrations
                     b.Navigation("OrderPromotions");
 
                     b.Navigation("OrderTables");
-
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Promotion", b =>

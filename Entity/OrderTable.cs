@@ -17,9 +17,9 @@ namespace RestaurantManagementSystem.Models
         public int TableId { get; set; }
 
         [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
 
         [ForeignKey("TableId")]
-        public Table Table { get; set; }
+        public Table? Table { get; set; }
     }
 }

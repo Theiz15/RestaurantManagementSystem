@@ -36,9 +36,9 @@ namespace RestaurantManagementSystem.Models
 
 
         [ForeignKey("CustomerId")]
-        public User Customer { get; set; }
+        public User? Customer { get; set; }
 
         [ForeignKey("TableId")]
-        public Table Table { get; set; }
+        public Table? Table { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 {
     public enum InventoryTransactionType
     {
-        In, // Stock received
-        Out, // Stock used/sold
-        Adjustment // Correction
+        IN, // Stock received
+        OUT, // Stock used/sold
+        ADJUSTMENT // Correction
     }
 }

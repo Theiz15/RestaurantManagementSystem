@@ -1,19 +1,20 @@
 ﻿using AutoMapper; // Cần IMapper trong Controller
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantManagementSystem.DTOs;
 using RestaurantManagementSystem.DTOs.Requests;
 using RestaurantManagementSystem.DTOs.Responses;
 using RestaurantManagementSystem.Models;
 using RestaurantManagementSystem.Services;
+using RestaurantManagementSystem.Utils;
 
 namespace RestaurantManagementSystem.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IMapper _mapper; // Tiêm IMapper vào
+        private readonly IMapper _mapper;
 
         public UsersController(IUserService userService, IMapper mapper)
         {
@@ -21,61 +22,79 @@ namespace RestaurantManagementSystem.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserResponse>>> GetUsers()
+        // CREATE USER
+        [HttpPost(ApiRoutes.CREATE_USER)]
+        public async Task<ActionResult<ApiResponse<UserResponse>>> createUser([FromBody] UserCreateDTO request)
         {
-            var userModels = await _userService.GetAllUsersAsync();  
-            var userResponses = _mapper.Map<IEnumerable<UserResponse>>(userModels);
-            return Ok(userResponses);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserResponse>> GetUser(int id)
-        {
-            var userModel = await _userService.GetUserByIdAsync(id);
-            if (userModel == null) return NotFound();
-
-            var userResponse = _mapper.Map<UserResponse>(userModel);
-            return Ok(userResponse);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<ApiResponse<User>>> CreateUser([FromBody] UserCreateDTO userDto)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            ApiResponse<User> apiResponse = new ApiResponse<User>()
+            var createdUser = await _userService.CreateUser(request);
+            var response = new ApiResponse<UserResponse>
             {
                 Code = 1000,
-                Message = "user",
-                Result = await _userService.CreateUserAsync(userDto)
-
+                Message = "User created successfully",
+                Result = createdUser
             };
-
-
-            return apiResponse;
+            return Ok(response);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDTO userDto)
+        // GET USER BY USER_ID
+        [HttpGet(ApiRoutes.GET_USER)]
+        public async Task<ActionResult<ApiResponse<UserResponse>>> getUserById([FromRoute] int id)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var result = await _userService.UpdateUserAsync(id, userDto);
-            if (!result) return NotFound();
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            var result = await _userService.DeleteUserAsync(id);
-            if (!result)
+            var user = await _userService.GetUserByUserId(id);
+            if (user == null)
             {
-                return NotFound();
+                throw new KeyNotFoundException("User not found.");
             }
-            return NoContent();
+            var response = new ApiResponse<UserResponse>
+            {
+                Code = 1000,
+                Message = "User retrieved successfully.",
+                Result = _mapper.Map<UserResponse>(user)
+            };
+            return Ok(response);
+
+        }
+
+        // GET ALL USERS
+        [HttpGet(ApiRoutes.GET_USERS)]
+        public async Task<ActionResult<ApiResponse<IEnumerable<UserResponse>>>> getAllUsers()
+        {
+            var users = await _userService.GetAllUsers();
+            var response = new ApiResponse<IEnumerable<UserResponse>>
+            {
+                Code = 1000,
+                Message = "Users retrieved successfully.",
+                Result = users
+            };
+            return Ok(response);
+        }
+
+        //UPDATE USER
+        [HttpPut(ApiRoutes.UPDATE_USER)]
+        public async Task<ActionResult<ApiResponse<UserResponse>>> updateUser([FromRoute] int id, [FromBody] UserUpdateDTO request)
+        {
+            var updatedUser = await _userService.UpdateUser(id, request);
+            var response = new ApiResponse<UserResponse>
+            {
+                Code = 1000,
+                Message = "User updated successfully",
+                Result = updatedUser
+            };
+            return Ok(response);
+        }
+
+        // DELETE USER
+        [HttpDelete(ApiRoutes.DELETE_USER)]
+        public async Task<ActionResult<ApiResponse<string>>> DeleteUser([FromRoute] int id)
+        {
+            await _userService.DeleteUser(id);
+            var response = new ApiResponse<string>
+            {
+                Code = 1000,
+                Message = "User deleted successfully",
+                Result = null
+            };
+            return Ok(response);
         }
     }
 }

@@ -14,10 +14,10 @@ namespace RestaurantManagementSystem.Models
         [Required]
         [StringLength(255)]
         [Column("product_name")]
-        public string ProductName { get; set; }
+        public string? ProductName { get; set; }
 
         [Column("description", TypeName = "text")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Column("price", TypeName = "decimal(10, 2)")]
         public decimal Price { get; set; }
@@ -32,10 +32,10 @@ namespace RestaurantManagementSystem.Models
         public int CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
-        public ICollection<OrderItem> OrderItems { get; set; }
-        public ICollection<Inventory> Inventories { get; set; } // Assuming Menu Items can be linked to inventory for stock tracking
-        public ICollection<FileUpload> FileUploads { get; set; }
+        public ICollection<OrderItem>? OrderItems { get; set; }
+        public ICollection<Inventory>? Inventories { get; set; } // Assuming Menu Items can be linked to inventory for stock tracking
+        public ICollection<FileUpload>? FileUploads { get; set; }
     }
 }
