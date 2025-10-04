@@ -15,14 +15,14 @@ namespace RestaurantManagementSystem.Models
         public int? MenuItemId { get; set; } // Link to menu item if it's an image of a dish
 
         [Column("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
         [Column("path")]
-        public string Path { get; set; }
+        public string? Path { get; set; }
 
         [Column("location")]
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
         [Column("file_type")]
         public FileType FileType { get; set; }
@@ -31,12 +31,11 @@ namespace RestaurantManagementSystem.Models
         public int? CategoryId { get; set; } // Link to category if it's a category image
 
         [ForeignKey("MenuItemId")]
-        public MenuItem MenuItem { get; set; }
+        public MenuItem? MenuItem { get; set; }
 
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
-        
     }
 
 

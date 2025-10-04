@@ -1,7 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using RestaurantManagementSystem.Data;
+using RestaurantManagementSystem.Entity;
+using RestaurantManagementSystem.Exception;
+using RestaurantManagementSystem.Mappings;
 using RestaurantManagementSystem.Repositories;
 using RestaurantManagementSystem.Services;
+using RestaurantManagementSystem.Services.Impl;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,7 +45,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 // 3. Register AutoMapper
-builder.Services.AddAutoMapper(typeof(RestaurantManagementSystem.Mappings.MappingProfile));
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+// 4. Register Global Exception Filter
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApiExceptionFilter>();
+});
+
+// 5. Register Mail Service and SmtpSettings
+// Bind config
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+
+// Register MailService
+builder.Services.AddScoped<MailService, MailServiceImpl>();
+
 
 var app = builder.Build();
 

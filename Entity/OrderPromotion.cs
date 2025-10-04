@@ -20,9 +20,9 @@ namespace RestaurantManagementSystem.Models
         public DateTime AppliedAt { get; set; }
 
         [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
 
         [ForeignKey("PromotionId")]
-        public Promotion Promotion { get; set; }
+        public Promotion? Promotion { get; set; }
     }
 }

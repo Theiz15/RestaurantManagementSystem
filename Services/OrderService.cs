@@ -59,7 +59,7 @@ namespace RestaurantManagementSystem.Services
                 else
                 {
                     // Handle case where menu item is not found or not available
-                    throw new Exception($"Menu item with ID {itemDto.MenuItemId} is not available.");
+                    throw new SystemException($"Menu item with ID {itemDto.MenuItemId} is not available.");
                 }
             }
             order.TotalAmount = totalAmount;

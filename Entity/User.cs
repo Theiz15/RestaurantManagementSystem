@@ -13,26 +13,26 @@ namespace RestaurantManagementSystem.Models
         [Required]
         [MaxLength(100)]
         [Column("username")]
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         [Required]
         [MaxLength(255)]
         [Column("password")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [Required]
         [MaxLength(255)]
         [Column("full_name")]
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         [MaxLength(255)]
         [Column("email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
         [MaxLength(20)]
         [Column("phone")]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
@@ -41,14 +41,14 @@ namespace RestaurantManagementSystem.Models
         public DateTime UpdatedAt { get; set; }
 
         [Column("role_id")]
-        public int RoleId { get; set; }
+        public int? RoleId { get; set; }
 
         [ForeignKey("RoleId")]
-        public Role Role { get; set; }
+        public Role? Role { get; set; }
 
-        public ICollection<ShiftAssignment> ShiftAssignments { get; set; }
-        public ICollection<Order> Orders { get; set; }
-        public ICollection<Reservation> Reservations { get; set; }
-        public ICollection<Payment> Payments { get; set; } // Cashier
+        public ICollection<ShiftAssignment>? ShiftAssignments { get; set; }
+        public ICollection<Order>? Orders { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
+        public ICollection<Payment>? Payments { get; set; } // Cashier
     }
 }
