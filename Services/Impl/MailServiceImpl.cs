@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using RestaurantManagementSystem.Entity;
 
@@ -13,9 +14,9 @@ namespace RestaurantManagementSystem.Services.Impl
     {
         private readonly SmtpSettings _smtpSettings;
 
-        public MailServiceImpl(SmtpSettings smtpSettings)
+        public MailServiceImpl(IOptions<SmtpSettings> smtpSettings)
         {
-            _smtpSettings = smtpSettings;
+            _smtpSettings = smtpSettings.Value;
         }
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)

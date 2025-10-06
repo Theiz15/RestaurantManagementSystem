@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantManagementSystem.Models;
-using RestaurantManagementSystem.Enums; // Đảm bảo đã include Enums
+using RestaurantManagementSystem.Enums;
+using RestaurantManagementSystem.Entities; // Đảm bảo đã include Enums
 
 namespace RestaurantManagementSystem.Data
 {
@@ -29,7 +30,7 @@ namespace RestaurantManagementSystem.Data
         public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
         public DbSet<FileUpload> FileUploads { get; set; }
 
-
+        public DbSet<InvalidToken> InvalidTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

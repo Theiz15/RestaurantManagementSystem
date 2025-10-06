@@ -1,4 +1,5 @@
 ﻿using AutoMapper; // Cần IMapper trong Controller
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantManagementSystem.DTOs;
@@ -56,6 +57,7 @@ namespace RestaurantManagementSystem.Controllers
         }
 
         // GET ALL USERS
+        [Authorize(Roles = "Admin")]
         [HttpGet(ApiRoutes.GET_USERS)]
         public async Task<ActionResult<ApiResponse<IEnumerable<UserResponse>>>> getAllUsers()
         {
