@@ -1,8 +1,10 @@
 ﻿using AutoMapper; // We will add AutoMapper later
+using MailKit;
 using Microsoft.AspNetCore.Identity;
 using RestaurantManagementSystem.DTOs;
 using RestaurantManagementSystem.DTOs.Requests;
 using RestaurantManagementSystem.DTOs.Responses;
+using RestaurantManagementSystem.Enums;
 using RestaurantManagementSystem.Models;
 using RestaurantManagementSystem.Repositories;
 using System.Collections.Generic;
@@ -14,10 +16,13 @@ namespace RestaurantManagementSystem.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper; // For mapping between Model and DTO
-        public UserService(IUserRepository userRepository, IMapper mapper)
+
+        private readonly MailService _mailService;
+        public UserService(IUserRepository userRepository, IMapper mapper, MailService mailService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _mailService = mailService;
         }
 
         public async Task<UserResponse> CreateUser(UserCreateDTO request)
@@ -38,12 +43,17 @@ namespace RestaurantManagementSystem.Services
             // Hash the password before saving
             string passwordHasher = BCrypt.Net.BCrypt.HashPassword(request.Password);
             user.Password = passwordHasher;
+
+            // Set default values
+            user.Status = UserStatus.ACTIVE;
             user.CreatedAt = DateTime.UtcNow;
 
             await _userRepository.AddAsync(user);
             await _userRepository.SaveChangesAsync();
 
-
+            // Send welcome email
+            await _mailService.SendEmailAsync(user.Email, "Welcome to Our Restaurant Management System", 
+                $"Hello {user.FullName},\n\nWelcome to our Restaurant Management System! We're glad to have you on board!!!");
             return _mapper.Map<UserResponse>(user);
         }
 
@@ -76,6 +86,12 @@ namespace RestaurantManagementSystem.Services
             // Update fields
             _mapper.Map(request, user);
             user.UpdatedAt = DateTime.UtcNow;
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                // Hash the new password before saving
+                string passwordHasher = BCrypt.Net.BCrypt.HashPassword(request.Password);
+                user.Password = passwordHasher;
+            }
             await _userRepository.SaveChangesAsync();
 
             return _mapper.Map<UserResponse>(user);
@@ -89,7 +105,8 @@ namespace RestaurantManagementSystem.Services
                 throw new KeyNotFoundException("User not found.");
             }
 
-            await _userRepository.DeleteAsync(user);
+            user.Status = UserStatus.INACTIVE; 
+            await _userRepository.SaveChangesAsync();
         }
 
     }
