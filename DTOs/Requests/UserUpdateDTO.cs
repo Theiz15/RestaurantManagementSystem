@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using RestaurantManagementSystem.Enums;
 
 namespace RestaurantManagementSystem.DTOs
 {
@@ -8,8 +9,6 @@ namespace RestaurantManagementSystem.DTOs
         [MaxLength(255)]
         public string? FullName { get; set; }
 
-        [Required(ErrorMessage = "Password is required.")]
-        [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
         [MaxLength(255)]
         public string? Password { get; set; }
 
@@ -21,7 +20,9 @@ namespace RestaurantManagementSystem.DTOs
         [MaxLength(20)]
         public string? Phone { get; set; }
 
-        // Có thể cho phép thay đổi RoleId
+        public UserStatus? Status { get; set; }
+
+        // Can change role when updating user
         public int? RoleId { get; set; }
     }
 }
