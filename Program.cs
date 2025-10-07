@@ -11,12 +11,9 @@ using RestaurantManagementSystem.Models;
 using RestaurantManagementSystem.Repositories;
 using RestaurantManagementSystem.Services;
 using RestaurantManagementSystem.Services.Impl;
-<<<<<<< HEAD
 using RestaurantManagementSystem.Services.Storage;
-=======
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
->>>>>>> develop
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +27,6 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
-//builder.Services.AddSwaggerGen();
 
 // 2. Register Repositories and Services for Dependency Injection
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -59,13 +55,10 @@ builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-<<<<<<< HEAD
 builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
-=======
-builder.Services.AddScoped<IMenuItemService, MenuItemService>();
+
 builder.Services.AddScoped<AuthenticationService>();
 
->>>>>>> develop
 // ... Register other services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 //builder.Services.AddEndpointsApiExplorer();
@@ -76,7 +69,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 // Thêm DbContext và cấu hình MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))); builder.Services.AddSwaggerGen();
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))); 
+
 
 
 // 3. Register AutoMapper
@@ -165,14 +159,7 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
-<<<<<<< HEAD
-//Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//`app.UseSwaggerUI();
-//}
-=======
+
 // Call the database initializer to seed the admin user
 using (var scope = app.Services.CreateScope())
 {
@@ -188,14 +175,8 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
     }
 }
->>>>>>> develop
 
-    //Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+  
 
 
 app.UseHttpsRedirection();
