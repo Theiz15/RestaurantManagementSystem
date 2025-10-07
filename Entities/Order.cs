@@ -37,9 +37,10 @@ namespace RestaurantManagementSystem.Models
         public DateTime UpdatedAt { get; set; }
 
         [ForeignKey("UserId")]
-        public User? User { get; set; }
-        public ICollection<OrderTable>? OrderTables { get; set; }
-        public ICollection<OrderItem>? OrderItems { get; set; }
-        public ICollection<OrderPromotion>? OrderPromotions { get; set; }
+        public User User { get; set; }
+        public ICollection<OrderTable> OrderTables { get; set; } = new List<OrderTable>();
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+        public ICollection<OrderPromotion> OrderPromotions { get; set; } = new List<OrderPromotion>();
     }
 }

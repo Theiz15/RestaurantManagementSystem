@@ -13,7 +13,7 @@ namespace RestaurantManagementSystem.Models
 
         [Required]
         [Column("item_name",TypeName="text")]
-        public string? ItemName { get; set; } // Denormalized for convenience
+        public string ItemName { get; set; } // Denormalized for convenience
 
         [Required]
         [Column("quantity", TypeName = "decimal(18, 3)")]
@@ -22,7 +22,7 @@ namespace RestaurantManagementSystem.Models
         [Required]
         [MaxLength(50)]
         [Column("unit")]
-        public string? Unit { get; set; }
+        public string Unit { get; set; }
 
         [Column("min_threshold", TypeName = "decimal(18, 3)")]
         public int MinThreshold { get; set; }
@@ -33,6 +33,6 @@ namespace RestaurantManagementSystem.Models
 
 
         //public MenuItem MenuItem { get; set; }
-        public ICollection<InventoryTransaction> InventoryTransactions { get; set; }
+        public ICollection<InventoryTransaction> InventoryTransactions { get; set; } = new List<InventoryTransaction>();
     }
 }

@@ -13,14 +13,14 @@ namespace RestaurantManagementSystem.Models
         [Required]
         [MaxLength(50)]
         [Column("code")]
-        public string? Code { get; set; }
+        public string Code { get; set; }
 
         [Required]
         [Column("name", TypeName = "text")]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [Column("description", TypeName = "text")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [Column("discount", TypeName = "decimal(5, 2)")]
         public decimal Discount { get; set; }
@@ -34,6 +34,6 @@ namespace RestaurantManagementSystem.Models
         [Column("is_active")]
         public bool IsActive { get; set; }
 
-        public ICollection<OrderPromotion>? OrderPromotions { get; set; }
+        public ICollection<OrderPromotion> OrderPromotions { get; set; } = new List<OrderPromotion>();
     }
 }

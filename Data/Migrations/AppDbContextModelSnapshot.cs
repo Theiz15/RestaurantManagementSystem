@@ -45,8 +45,13 @@ namespace RestaurantManagementSystem.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("description");
+
+                    b.Property<int?>("FileUploadId")
+                        .HasColumnType("int")
+                        .HasColumnName("file_upload_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -55,6 +60,9 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileUploadId")
+                        .IsUnique();
 
                     b.ToTable("categories");
                 });
@@ -68,16 +76,13 @@ namespace RestaurantManagementSystem.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int")
-                        .HasColumnName("category_id");
-
                     b.Property<string>("FileType")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("file_type");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("location");
 
@@ -86,6 +91,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("menu_item_id");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("name");
 
@@ -95,8 +101,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("path");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("MenuItemId");
 
@@ -121,9 +125,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("last_updated");
 
-                    b.Property<int?>("MenuItemId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("MinThreshold")
                         .HasColumnType("decimal(18, 3)")
                         .HasColumnName("min_threshold");
@@ -139,8 +140,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("unit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MenuItemId");
 
                     b.ToTable("inventories");
                 });
@@ -196,6 +195,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -410,6 +410,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("code");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -620,6 +621,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("capacity");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("location");
@@ -655,6 +657,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("email");
@@ -674,7 +677,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("phone");
 
-                    b.Property<int?>("RoleId")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int")
                         .HasColumnName("role_id");
 
@@ -699,26 +702,22 @@ namespace RestaurantManagementSystem.Migrations
                     b.ToTable("users");
                 });
 
+            modelBuilder.Entity("RestaurantManagementSystem.Models.Category", b =>
+                {
+                    b.HasOne("RestaurantManagementSystem.Models.FileUpload", "Image")
+                        .WithOne("Category")
+                        .HasForeignKey("RestaurantManagementSystem.Models.Category", "FileUploadId");
+
+                    b.Navigation("Image");
+                });
+
             modelBuilder.Entity("RestaurantManagementSystem.Models.FileUpload", b =>
                 {
-                    b.HasOne("RestaurantManagementSystem.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
-
                     b.HasOne("RestaurantManagementSystem.Models.MenuItem", "MenuItem")
                         .WithMany("FileUploads")
                         .HasForeignKey("MenuItemId");
 
-                    b.Navigation("Category");
-
                     b.Navigation("MenuItem");
-                });
-
-            modelBuilder.Entity("RestaurantManagementSystem.Models.Inventory", b =>
-                {
-                    b.HasOne("RestaurantManagementSystem.Models.MenuItem", null)
-                        .WithMany("Inventories")
-                        .HasForeignKey("MenuItemId");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.InventoryTransaction", b =>
@@ -818,7 +817,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasForeignKey("CashierId");
 
                     b.HasOne("RestaurantManagementSystem.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("Payments")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -870,7 +869,9 @@ namespace RestaurantManagementSystem.Migrations
                 {
                     b.HasOne("RestaurantManagementSystem.Models.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
                 });
@@ -878,6 +879,12 @@ namespace RestaurantManagementSystem.Migrations
             modelBuilder.Entity("RestaurantManagementSystem.Models.Category", b =>
                 {
                     b.Navigation("MenuItems");
+                });
+
+            modelBuilder.Entity("RestaurantManagementSystem.Models.FileUpload", b =>
+                {
+                    b.Navigation("Category")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Inventory", b =>
@@ -889,8 +896,6 @@ namespace RestaurantManagementSystem.Migrations
                 {
                     b.Navigation("FileUploads");
 
-                    b.Navigation("Inventories");
-
                     b.Navigation("OrderItems");
                 });
 
@@ -901,6 +906,8 @@ namespace RestaurantManagementSystem.Migrations
                     b.Navigation("OrderPromotions");
 
                     b.Navigation("OrderTables");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Promotion", b =>

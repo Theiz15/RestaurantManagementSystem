@@ -21,6 +21,16 @@ namespace RestaurantManagementSystem.Repositories
             return await _context.Users.AnyAsync(u => u.Username == username);
         }
 
+<<<<<<< HEAD
+        public Task UpdateAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(User user)
+        {
+            throw new NotImplementedException();
+=======
         public async Task UpdateAsync(User user)
         {
             _context.Users.Update(user);
@@ -36,6 +46,7 @@ namespace RestaurantManagementSystem.Repositories
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+>>>>>>> develop
         }
     }
 }

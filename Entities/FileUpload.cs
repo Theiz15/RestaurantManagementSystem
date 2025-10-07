@@ -27,15 +27,10 @@ namespace RestaurantManagementSystem.Models
         [Column("file_type")]
         public FileType FileType { get; set; }
 
-        [Column("category_id")]
-        public int? CategoryId { get; set; } // Link to category if it's a category image
-
         [ForeignKey("MenuItemId")]
         public MenuItem? MenuItem { get; set; }
 
-        [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
-
     }
 
 
