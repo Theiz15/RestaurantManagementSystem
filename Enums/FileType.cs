@@ -3,6 +3,6 @@
     public enum FileType
     {
         AVATAR,
-        IMAGE
+        GALLERY
     }
 }

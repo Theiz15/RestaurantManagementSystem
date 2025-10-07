@@ -29,9 +29,9 @@ namespace RestaurantManagementSystem.Models
         public DateTime Timestamp { get; set; }
 
         [ForeignKey("OrderId")]
-        public Order? Order { get; set; }
+        public Order Order { get; set; }
 
         [ForeignKey("CashierId")]
-        public User? Cashier { get; set; }
+        public User Cashier { get; set; }
     }
 }

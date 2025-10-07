@@ -30,6 +30,6 @@ namespace RestaurantManagementSystem.Models
         [Column("shift_date")]
         public DateTime ShiftDate { get; set; }
 
-        public ICollection<ShiftAssignment>? ShiftAssignments { get; set; }
+        public ICollection<ShiftAssignment> ShiftAssignments { get; set; } = new List<ShiftAssignment>();
     }
 }

@@ -14,23 +14,23 @@ namespace RestaurantManagementSystem.Models
         [Required]
         [MaxLength(100)]
         [Column("username")]
-        public string? Username { get; set; }
+        public string Username { get; set; }
 
         [MaxLength(255)]
         [Column("password")]
-        public string? Password { get; set; }
+        public string Password { get; set; }
 
         [MaxLength(255)]
         [Column("full_name")]
-        public string? FullName { get; set; }
+        public string FullName { get; set; }
 
         [MaxLength(255)]
         [Column("email")]
-        public string? Email { get; set; }
+        public string Email { get; set; }
 
         [MaxLength(20)]
         [Column("phone")]
-        public string? Phone { get; set; }
+        public string Phone { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
@@ -43,6 +43,7 @@ namespace RestaurantManagementSystem.Models
 
         [ForeignKey("RoleId")]
         public Role? Role { get; set; }
+
 
         [Column("status")]
         public UserStatus? Status { get; set; }

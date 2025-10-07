@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RestaurantManagementSystem.Entity
+namespace RestaurantManagementSystem.Models
 {
     public class SmtpSettings
     {

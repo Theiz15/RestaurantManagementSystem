@@ -18,6 +18,14 @@ namespace RestaurantManagementSystem.Models
         [Column("description")]
         public string? Description { get; set; }
 
-        public ICollection<MenuItem>? MenuItems { get; set; }
+
+
+        [Column("file_upload_id")]
+        public int? FileUploadId { get; set; }
+
+        [ForeignKey("FileUploadId")]
+        public FileUpload? Image { get; set; }
+
+        public ICollection<MenuItem> MenuItems { get; set; } = new List<MenuItem>();
     }
 }

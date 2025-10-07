@@ -6,6 +6,8 @@ namespace RestaurantManagementSystem.Repositories
 {
     public interface IMenuItemRepository : IGenericRepository<MenuItem>
     {
-        Task<IEnumerable<MenuItem>> GetMenuItemsWithCategoryAsync();
+        Task<IEnumerable<MenuItem>> GetAllWithCategoryAsync();
+        Task<MenuItem?> GetByIdWithCategoryAsync(int id);
+        Task<MenuItem?> GetByNameAsync(string name);
     }
 }
