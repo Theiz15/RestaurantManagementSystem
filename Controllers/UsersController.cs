@@ -72,6 +72,7 @@ namespace RestaurantManagementSystem.Controllers
         }
 
         //UPDATE USER
+        [Authorize(Roles = "Staff, Admin")]
         [HttpPut(ApiRoutes.UPDATE_USER)]
         public async Task<ActionResult<ApiResponse<UserResponse>>> updateUser([FromRoute] int id, [FromBody] UserUpdateDTO request)
         {

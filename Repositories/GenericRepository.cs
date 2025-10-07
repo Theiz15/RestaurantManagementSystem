@@ -21,7 +21,9 @@ namespace RestaurantManagementSystem.Repositories
 
         public async Task<T> GetByIdAsync(int id)
         {
+#pragma warning disable CS8603 // Possible null reference return.
             return await _context.Set<T>().FindAsync(id);
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public async Task AddAsync(T entity)
