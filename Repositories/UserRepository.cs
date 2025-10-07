@@ -21,6 +21,7 @@ namespace RestaurantManagementSystem.Repositories
             return await _context.Users.AnyAsync(u => u.Username == username);
         }
 
+<<<<<<< HEAD
         public Task UpdateAsync(User user)
         {
             throw new NotImplementedException();
@@ -29,6 +30,23 @@ namespace RestaurantManagementSystem.Repositories
         public Task DeleteAsync(User user)
         {
             throw new NotImplementedException();
+=======
+        public async Task UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(User user)
+        {
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+>>>>>>> develop
         }
     }
 }

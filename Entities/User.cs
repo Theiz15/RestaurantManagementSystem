@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using RestaurantManagementSystem.Enums;
 
 namespace RestaurantManagementSystem.Models
 {
@@ -15,12 +16,10 @@ namespace RestaurantManagementSystem.Models
         [Column("username")]
         public string Username { get; set; }
 
-        [Required]
         [MaxLength(255)]
         [Column("password")]
         public string Password { get; set; }
 
-        [Required]
         [MaxLength(255)]
         [Column("full_name")]
         public string FullName { get; set; }
@@ -29,7 +28,6 @@ namespace RestaurantManagementSystem.Models
         [Column("email")]
         public string Email { get; set; }
 
-        [Required]
         [MaxLength(20)]
         [Column("phone")]
         public string Phone { get; set; }
@@ -46,9 +44,13 @@ namespace RestaurantManagementSystem.Models
         [ForeignKey("RoleId")]
         public Role? Role { get; set; }
 
-        public ICollection<ShiftAssignment> ShiftAssignments { get; set; } = new List<ShiftAssignment>();
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
-        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
-        public ICollection<Payment> Payments { get; set; } = new List<Payment>(); // Cashier   
+
+        [Column("status")]
+        public UserStatus? Status { get; set; }
+
+        public ICollection<ShiftAssignment>? ShiftAssignments { get; set; }
+        public ICollection<Order>? Orders { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
+        public ICollection<Payment>? Payments { get; set; } // Cashier
     }
 }

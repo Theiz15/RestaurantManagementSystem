@@ -9,5 +9,7 @@ namespace RestaurantManagementSystem.Repositories
         Task<bool> existsByUsername(string username);
         Task UpdateAsync(User user);
         Task DeleteAsync(User user);
+
+        Task<User> GetUserByEmailAsync(string email);
     }
 }

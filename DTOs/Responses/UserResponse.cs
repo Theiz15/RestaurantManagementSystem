@@ -1,4 +1,6 @@
-﻿namespace RestaurantManagementSystem.DTOs.Responses
+﻿using RestaurantManagementSystem.Enums;
+
+namespace RestaurantManagementSystem.DTOs.Responses
 {
     public class UserResponse
     {
@@ -8,6 +10,7 @@
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? RoleName { get; set; }
+        public UserStatus? Status { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }
