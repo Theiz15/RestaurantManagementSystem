@@ -49,7 +49,7 @@ namespace RestaurantManagementSystem.Exception
                     statusCode = (int)HttpStatusCode.Unauthorized; // Unauthorized
                     code = 1005;
                     message = "Invalid token.";
-                    break;
+                    break; 
                 default:
                     statusCode = (int)HttpStatusCode.InternalServerError; // Internal Server Error
                     code = 1003;

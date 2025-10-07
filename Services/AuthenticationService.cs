@@ -79,6 +79,7 @@ namespace RestaurantManagementSystem.Services
                     // Other properties
                 };
                 await _userRepository.AddAsync(user);
+                // await _userRepository.SaveChangesAsync();
             }
 
             var token = GenerateJwtToken(user);
