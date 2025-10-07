@@ -26,6 +26,6 @@ namespace RestaurantManagementSystem.Models
         public DateTime Timestamp { get; set; }
 
         [ForeignKey("InventoryId")]
-        public Inventory? Inventory { get; set; }
+        public Inventory Inventory { get; set; }
     }
 }

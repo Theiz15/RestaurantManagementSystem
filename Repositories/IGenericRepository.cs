@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace RestaurantManagementSystem.Repositories
@@ -11,5 +12,9 @@ namespace RestaurantManagementSystem.Repositories
         void Update(T entity);
         void Delete(T entity);
         Task SaveChangesAsync();
+
+        Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate);
+
+        Task AddRangeAsync(IEnumerable<T> entities);
     }
 }

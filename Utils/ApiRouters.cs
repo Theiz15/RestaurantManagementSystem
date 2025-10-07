@@ -20,6 +20,27 @@ namespace RestaurantManagementSystem.Utils
         public const string INTROSPECT = "/api/v1/auth/introspect";
         public const string CHANGE_PASSWORD = "/api/v1/auth/change-password";
         public const string FORGOT_PASSWORD = "/api/v1/auth/forgot-password";
-        
+
+
+        // Category routes
+        public const string CREATE_CATEGORY = "/api/v1/categories";
+        public const string GET_CATEGORIES = "/api/v1/categories";
+        public const string GET_CATEGORY = "/api/v1/categories/{id}";
+        public const string UPDATE_CATEGORY = "/api/v1/categories/update/{id}";
+        public const string DELETE_CATEGORY = "/api/v1/categories/delete/{id}";
+
+
+        // Menu Item routes
+        public const string CREATE_MENU_ITEM= "/api/v1/menuitems";
+        public const string GET_MENU_ITEMS = "/api/v1/menuitems";
+        public const string GET_MENU_ITEM = "/api/v1/menuitems/{id}";
+        public const string UPDATE_MENU_ITEM = "/api/v1/menuitems/update/{id}";
+        public const string DELETE_MENU_ITEM = "/api/v1/menuitems/delete/{id}";
+
+        // File upload routes
+        public const string UPLOAD_MENU_ITEM_IMAGES = "api/v1/menuitems/{id}/upload-image";
+        public const string UPLOAD_CATEGORY_IMAGES = "api/v1/categories/{id}/upload-image";
+        public const string DELETE_IMAGE = "api/v1/{fileId}";
+
     }
 }

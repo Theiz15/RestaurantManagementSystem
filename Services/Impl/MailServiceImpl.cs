@@ -1,3 +1,8 @@
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.Extensions.Options;
+using MimeKit;
+using RestaurantManagementSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +11,6 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using RestaurantManagementSystem.Entity;
 
 namespace RestaurantManagementSystem.Services.Impl
 {

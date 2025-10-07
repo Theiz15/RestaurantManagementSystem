@@ -5,12 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantManagementSystem.Data;
-using RestaurantManagementSystem.Entity;
 using RestaurantManagementSystem.Exception;
 using RestaurantManagementSystem.Mappings;
+using RestaurantManagementSystem.Models;
 using RestaurantManagementSystem.Repositories;
 using RestaurantManagementSystem.Services;
 using RestaurantManagementSystem.Services.Impl;
+using RestaurantManagementSystem.Services.Storage;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -32,15 +33,30 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+
+builder.Services.AddScoped<ICategoryService, CategoryServiceImpl>();
+
 builder.Services.AddScoped<RestaurantManagementSystem.Services.MailService, MailServiceImpl>();
 builder.Services.AddScoped<RoleRepository>();
 builder.Services.AddScoped<DatabaseInitializer>();
 builder.Services.AddScoped<InvalidTokenRepository>();
+
 // ... Register other repositories
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+builder.Services.AddScoped<IFileUploadRepository, FileUploadRepository>();
+builder.Services.AddScoped<IFileUploadService, FileUploadServiceImpl>();
+builder.Services.AddSingleton<IFileStorageService, LocalStorageService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+
+// Đăng ký Service
+builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IMenuItemService, MenuItemService>();
+builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
+
 builder.Services.AddScoped<AuthenticationService>();
 
 // ... Register other services
@@ -53,7 +69,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 // Thêm DbContext và cấu hình MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))); builder.Services.AddSwaggerGen();
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))); 
+
 
 
 // 3. Register AutoMapper
@@ -142,6 +159,7 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+
 // Call the database initializer to seed the admin user
 using (var scope = app.Services.CreateScope())
 {
@@ -158,12 +176,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-    //Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+  
 
 
 app.UseHttpsRedirection();

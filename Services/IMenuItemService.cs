@@ -1,14 +1,15 @@
 ﻿using RestaurantManagementSystem.DTOs.Requests;
+using RestaurantManagementSystem.DTOs.Responses;
 
 
 namespace RestaurantManagementSystem.Services
 {
     public interface IMenuItemService
     {
-        Task<IEnumerable<MenuItemDTO>> GetAllMenuItemsAsync();
-        Task<MenuItemDTO> GetMenuItemByIdAsync(int id);
-        Task<MenuItemDTO> CreateMenuItemAsync(MenuItemDTO menuItemDto);
-        Task<bool> UpdateMenuItemAsync(int id, MenuItemDTO menuItemDto);
-        Task<bool> DeleteMenuItemAsync(int id);
+        Task<IEnumerable<MenuItemResponse>> GetAllMenuItemsAsync();
+        Task<MenuItemResponse> GetMenuItemByIdAsync(int id);
+        Task<MenuItemResponse> CreateMenuItemAsync(MenuItemCreateDTO menuItemDto);
+        Task<MenuItemResponse> UpdateMenuItemAsync(int id, MenuItemUpdateDTO menuItemDto);
+        Task DeleteMenuItemAsync(int id);
     }
 }
