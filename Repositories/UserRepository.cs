@@ -20,5 +20,15 @@ namespace RestaurantManagementSystem.Repositories
         {
             return await _context.Users.AnyAsync(u => u.Username == username);
         }
+
+        public Task UpdateAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

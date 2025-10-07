@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RestaurantManagementSystem.Data;
-using RestaurantManagementSystem.Entity;
 using RestaurantManagementSystem.Exception;
 using RestaurantManagementSystem.Mappings;
+using RestaurantManagementSystem.Models;
 using RestaurantManagementSystem.Repositories;
 using RestaurantManagementSystem.Services;
 using RestaurantManagementSystem.Services.Impl;
+using RestaurantManagementSystem.Services.Storage;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,17 +21,31 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
+//builder.Services.AddSwaggerGen();
 
 // 2. Register Repositories and Services for Dependency Injection
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryServiceImpl>();
 // ... Register other repositories
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+builder.Services.AddScoped<IFileUploadRepository, FileUploadRepository>();
+builder.Services.AddScoped<IFileUploadService, FileUploadServiceImpl>();
+builder.Services.AddSingleton<IFileStorageService, LocalStorageService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+
+// Đăng ký Service
+builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IMenuItemService, MenuItemService>();
+builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
 // ... Register other services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 //builder.Services.AddEndpointsApiExplorer();
@@ -64,11 +79,11 @@ builder.Services.AddScoped<MailService, MailServiceImpl>();
 var app = builder.Build();
 
 //Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//`app.UseSwaggerUI();
+//}
 
 app.UseHttpsRedirection();
 

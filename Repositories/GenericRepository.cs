@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantManagementSystem.Data;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace RestaurantManagementSystem.Repositories
@@ -42,6 +43,16 @@ namespace RestaurantManagementSystem.Repositories
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().SingleOrDefaultAsync(predicate);
+        }
+
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _context.Set<T>().AddRangeAsync(entities);
         }
     }
 }
