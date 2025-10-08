@@ -12,6 +12,8 @@ namespace RestaurantManagementSystem.Data
         }
 
         // DbSets cho tất cả các Models của bạn
+        //public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Shift> Shifts { get; set; }
@@ -66,6 +68,13 @@ namespace RestaurantManagementSystem.Data
                 .WithMany(u => u.Payments)
                 .HasForeignKey(p => p.CashierId)
                 .IsRequired(false); // Cashier có thể null nếu thanh toán tự động, v.v.
+
+            // Cấu hình mối quan hệ 1-n giữa Inventory và InventoryItem
+            modelBuilder.Entity<InventoryItem>()
+                .HasOne(ii => ii.Inventory)
+                .WithMany(i => i.InventoryItems)
+                .HasForeignKey(ii => ii.InventoryId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Chuyển đổi Enum sang chuỗi khi lưu vào DB (hoặc int tùy chọn)
             modelBuilder.Entity<Shift>()
