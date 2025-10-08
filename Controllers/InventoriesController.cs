@@ -42,7 +42,16 @@ namespace RestaurantManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<Inventory>> AddInventory(Inventory inventory)
         {
-            // Thiết lập LastUpdated khi tạo mới
+            // --- BẮT ĐẦU PHẦN CODE MỚI ---
+            // Kiểm tra xem tên inventory đã tồn tại hay chưa
+            if (await _inventoryRepository.InventoryExistsByNameAsync(inventory.ItemName))
+            {
+                // Nếu đã tồn tại, trả về lỗi 409 Conflict với thông báo rõ ràng
+                return Conflict($"An inventory with the name '{inventory.ItemName}' already exists.");
+            }
+            // --- KẾT THÚC PHẦN CODE MỚI ---
+
+            // Nếu tên không trùng, tiếp tục logic thêm mới như cũ
             inventory.LastUpdated = DateTime.UtcNow;
             await _inventoryRepository.AddInventoryAsync(inventory);
             return CreatedAtAction(nameof(GetInventory), new { id = inventory.Id }, inventory);

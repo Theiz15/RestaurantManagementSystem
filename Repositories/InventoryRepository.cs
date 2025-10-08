@@ -23,12 +23,25 @@ namespace RestaurantManagementSystem.Repositories
         {
             return await _context.Inventories.Include(i => i.InventoryItems).ToListAsync();
         }
+        public async Task<InventoryItem> GetInventoryItemByNameAsync(int inventoryId, string name)
+        {
+            // Tìm item đầu tiên khớp với cả inventoryId và tên (không phân biệt hoa thường)
+            return await _context.InventoryItems
+                .FirstOrDefaultAsync(ii => ii.InventoryId == inventoryId && ii.Name.ToLower() == name.ToLower());
+        }
 
         public async Task<Inventory> GetInventoryByIdAsync(int inventoryId)
         {
             return await _context.Inventories
                                  .Include(i => i.InventoryItems)
                                  .FirstOrDefaultAsync(i => i.Id == inventoryId);
+        }
+
+        public async Task<bool> InventoryExistsByNameAsync(string name)
+        {
+            // Sử dụng ToLower() để kiểm tra không phân biệt chữ hoa, chữ thường
+            // Điều này giúp tránh việc tạo ra "Thịt Bò" khi đã có "thịt bò"
+            return await _context.Inventories.AnyAsync(i => i.ItemName.ToLower() == name.ToLower());
         }
 
         public async Task AddInventoryAsync(Inventory inventory)    

@@ -6,6 +6,8 @@ namespace RestaurantManagementSystem.Repositories
 {
     public interface IInventoryRepository
     {
+        Task<InventoryItem> GetInventoryItemByNameAsync(int inventoryId, string name);
+        Task<bool> InventoryExistsByNameAsync(string name);
         Task<IEnumerable<Inventory>> GetAllInventoriesAsync();
         Task<Inventory> GetInventoryByIdAsync(int inventoryId);
         Task AddInventoryAsync(Inventory inventory);

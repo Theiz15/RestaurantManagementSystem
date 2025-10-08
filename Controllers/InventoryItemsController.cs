@@ -49,27 +49,40 @@ namespace RestaurantManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<InventoryItem>> AddInventoryItem(int inventoryId, [FromBody] InventoryItemCreateDTO itemDto)
         {
-            // Kiểm tra xem Inventory cha có tồn tại không
-            var existingInventory = await _inventoryRepository.GetInventoryByIdAsync(inventoryId);
-            if (existingInventory == null)
+            // 1. Kiểm tra xem Inventory cha có tồn tại không
+            var parentInventory = await _inventoryRepository.GetInventoryByIdAsync(inventoryId);
+            if (parentInventory == null)
             {
                 return NotFound($"Inventory with ID {inventoryId} not found.");
             }
 
-            // 1. Tạo một đối tượng InventoryItem mới từ DTO
-            var newInventoryItem = new InventoryItem
+            // 2. Tìm kiếm item đã tồn tại theo tên và inventoryId
+            var existingItem = await _inventoryRepository.GetInventoryItemByNameAsync(inventoryId, itemDto.Name);
+
+            if (existingItem != null)
             {
-                Name = itemDto.Name,
-                Quantity = itemDto.Quantity,
-                Unit = itemDto.Unit,
-                InventoryId = inventoryId // 2. Gán InventoryId từ URL
-            };
+                // 3. NẾU TỒN TẠI: Cộng dồn số lượng và cập nhật
+                existingItem.Quantity += itemDto.Quantity;
+                await _inventoryRepository.UpdateInventoryItemAsync(existingItem);
 
-            // 3. Thêm đối tượng mới vào database
-            await _inventoryRepository.AddInventoryItemAsync(newInventoryItem);
+                // Trả về 200 OK cùng với item đã được cập nhật
+                return Ok(existingItem);
+            }
+            else
+            {
+                // 4. NẾU CHƯA TỒN TẠI: Tạo mới như bình thường
+                var newInventoryItem = new InventoryItem
+                {
+                    Name = itemDto.Name,
+                    Quantity = itemDto.Quantity,
+                    Unit = itemDto.Unit,
+                    InventoryId = inventoryId
+                };
+                await _inventoryRepository.AddInventoryItemAsync(newInventoryItem);
 
-            // Trả về kết quả với đối tượng đã được tạo đầy đủ (bao gồm Id)
-            return CreatedAtAction(nameof(GetInventoryItem), new { inventoryId = newInventoryItem.InventoryId, id = newInventoryItem.Id }, newInventoryItem);
+                // Trả về 201 Created
+                return CreatedAtAction(nameof(GetInventoryItem), new { inventoryId = newInventoryItem.InventoryId, id = newInventoryItem.Id }, newInventoryItem);
+            }
         }
 
         // PUT: api/inventories/{inventoryId}/items/{id}
