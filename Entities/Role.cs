@@ -13,7 +13,7 @@ namespace RestaurantManagementSystem.Models
         [Required]
         [MaxLength(50)]
         [Column("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public ICollection<User> Users { get; set; } = new List<User>();
     }

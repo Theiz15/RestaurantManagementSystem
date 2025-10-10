@@ -10,7 +10,7 @@ namespace RestaurantManagementSystem.Repositories
 {
     public class RoleRepository : GenericRepository<Role>
     {
-        private readonly AppDbContext _context;
+        private  readonly AppDbContext _context;
         public RoleRepository(AppDbContext context) : base(context)
         {
             _context = context;

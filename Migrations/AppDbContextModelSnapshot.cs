@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantManagementSystem.Data;
 
@@ -12,11 +11,9 @@ using RestaurantManagementSystem.Data;
 namespace RestaurantManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251003093809_MakeRoleNullable")]
-    partial class MakeRoleNullable
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,6 +21,19 @@ namespace RestaurantManagementSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("RestaurantManagementSystem.Entities.InvalidToken", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InvalidTokens");
+                });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Category", b =>
                 {
@@ -38,6 +48,10 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("description");
 
+                    b.Property<int?>("FileUploadId")
+                        .HasColumnType("int")
+                        .HasColumnName("file_upload_id");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -45,6 +59,9 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileUploadId")
+                        .IsUnique();
 
                     b.ToTable("categories");
                 });
@@ -57,10 +74,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("id");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int")
-                        .HasColumnName("category_id");
 
                     b.Property<string>("FileType")
                         .IsRequired()
@@ -86,8 +99,6 @@ namespace RestaurantManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("MenuItemId");
 
                     b.ToTable("file_uploads");
@@ -111,9 +122,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("last_updated");
 
-                    b.Property<int?>("MenuItemId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("MinThreshold")
                         .HasColumnType("decimal(18, 3)")
                         .HasColumnName("min_threshold");
@@ -129,8 +137,6 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("unit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MenuItemId");
 
                     b.ToTable("inventories");
                 });
@@ -186,6 +192,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -400,6 +407,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("code");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -528,16 +536,18 @@ namespace RestaurantManagementSystem.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime(6)")
+                    b.Property<string>("EndTime")
+                        .IsRequired()
+                        .HasColumnType("longtext")
                         .HasColumnName("end_time");
 
-                    b.Property<DateTime>("ShiftDate")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("shift_date");
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext")
+                        .HasColumnName("name");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime(6)")
+                    b.Property<string>("StartTime")
+                        .IsRequired()
+                        .HasColumnType("longtext")
                         .HasColumnName("start_time");
 
                     b.Property<string>("Status")
@@ -552,16 +562,46 @@ namespace RestaurantManagementSystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("shifts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EndTime = "12:00:00",
+                            Name = "Day Shift",
+                            StartTime = "08:00:00",
+                            Status = "Active",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            EndTime = "17:00:00",
+                            Name = "Afternoon Shift",
+                            StartTime = "13:00:00",
+                            Status = "Active",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            EndTime = "22:00:00",
+                            Name = "Night Shift",
+                            StartTime = "17:00:00",
+                            Status = "Active",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.ShiftAssignment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ShiftId")
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnName("shift_id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
 
                     b.Property<DateTime?>("ActualEndTime")
                         .HasColumnType("datetime(6)")
@@ -571,25 +611,26 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("actual_start_time");
 
-                    b.Property<DateTime>("AssignedAt")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("assigned_at");
-
                     b.Property<decimal>("HoursWorked")
                         .HasColumnType("decimal(18, 3)")
                         .HasColumnName("hours_worked");
 
-                    b.Property<int>("ShiftId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("shift_id");
+                        .HasColumnName("id");
 
-                    b.Property<int>("UserId")
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Status")
                         .HasColumnType("int")
-                        .HasColumnName("user_id");
+                        .HasColumnName("status");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime?>("WorkDate")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("work_date");
 
-                    b.HasIndex("ShiftId");
+                    b.HasKey("ShiftId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -610,6 +651,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("capacity");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("location");
@@ -645,6 +687,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("email");
@@ -671,6 +714,10 @@ namespace RestaurantManagementSystem.Migrations
                         .HasColumnType("int")
                         .HasColumnName("role_id");
 
+                    b.Property<int?>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("updated_at");
@@ -688,26 +735,22 @@ namespace RestaurantManagementSystem.Migrations
                     b.ToTable("users");
                 });
 
+            modelBuilder.Entity("RestaurantManagementSystem.Models.Category", b =>
+                {
+                    b.HasOne("RestaurantManagementSystem.Models.FileUpload", "Image")
+                        .WithOne("Category")
+                        .HasForeignKey("RestaurantManagementSystem.Models.Category", "FileUploadId");
+
+                    b.Navigation("Image");
+                });
+
             modelBuilder.Entity("RestaurantManagementSystem.Models.FileUpload", b =>
                 {
-                    b.HasOne("RestaurantManagementSystem.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
-
                     b.HasOne("RestaurantManagementSystem.Models.MenuItem", "MenuItem")
                         .WithMany("FileUploads")
                         .HasForeignKey("MenuItemId");
 
-                    b.Navigation("Category");
-
                     b.Navigation("MenuItem");
-                });
-
-            modelBuilder.Entity("RestaurantManagementSystem.Models.Inventory", b =>
-                {
-                    b.HasOne("RestaurantManagementSystem.Models.MenuItem", null)
-                        .WithMany("Inventories")
-                        .HasForeignKey("MenuItemId");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.InventoryTransaction", b =>
@@ -807,7 +850,7 @@ namespace RestaurantManagementSystem.Migrations
                         .HasForeignKey("CashierId");
 
                     b.HasOne("RestaurantManagementSystem.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("Payments")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -869,6 +912,11 @@ namespace RestaurantManagementSystem.Migrations
                     b.Navigation("MenuItems");
                 });
 
+            modelBuilder.Entity("RestaurantManagementSystem.Models.FileUpload", b =>
+                {
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("RestaurantManagementSystem.Models.Inventory", b =>
                 {
                     b.Navigation("InventoryTransactions");
@@ -877,8 +925,6 @@ namespace RestaurantManagementSystem.Migrations
             modelBuilder.Entity("RestaurantManagementSystem.Models.MenuItem", b =>
                 {
                     b.Navigation("FileUploads");
-
-                    b.Navigation("Inventories");
 
                     b.Navigation("OrderItems");
                 });
@@ -890,6 +936,8 @@ namespace RestaurantManagementSystem.Migrations
                     b.Navigation("OrderPromotions");
 
                     b.Navigation("OrderTables");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Models.Promotion", b =>

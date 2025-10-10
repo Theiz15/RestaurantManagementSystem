@@ -49,6 +49,8 @@ builder.Services.AddScoped<IFileUploadService, FileUploadServiceImpl>();
 builder.Services.AddSingleton<IFileStorageService, LocalStorageService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+builder.Services.AddScoped<ShiftRepository>();
+builder.Services.AddScoped<ShiftAssignmentRepository>();
 
 // Đăng ký Service
 builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
@@ -56,6 +58,7 @@ builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
+builder.Services.AddScoped<ShiftAssignmentService, ShiftAssignmentServiceImpl>();
 
 builder.Services.AddScoped<AuthenticationService>();
 

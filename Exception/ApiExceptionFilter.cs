@@ -53,7 +53,7 @@ namespace RestaurantManagementSystem.Exception
                 default:
                     statusCode = (int)HttpStatusCode.InternalServerError; // Internal Server Error
                     code = 1003;
-                    message = "An unexpected error occurred.";
+                    message = exception.Message;
                     break;
             }
 

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RestaurantManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class MakeRoleNullable : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,19 +18,36 @@ namespace RestaurantManagementSystem.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "categories",
+                name: "InvalidTokens",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InvalidTokens", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "inventories",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                    item_name = table.Column<string>(type: "text", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    quantity = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
+                    unit = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    min_threshold = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
+                    last_updated = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_categories", x => x.id);
+                    table.PrimaryKey("PK_inventories", x => x.id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -44,7 +61,7 @@ namespace RestaurantManagementSystem.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     name = table.Column<string>(type: "text", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "text", nullable: true)
+                    description = table.Column<string>(type: "text", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     discount = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     start_date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -78,12 +95,15 @@ namespace RestaurantManagementSystem.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    start_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    end_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    start_time = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    end_time = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     status = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    shift_date = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -102,7 +122,7 @@ namespace RestaurantManagementSystem.Migrations
                     capacity = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    location = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                    location = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -112,27 +132,24 @@ namespace RestaurantManagementSystem.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "menu_items",
+                name: "inventory_transaction",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    product_name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                    inventory_id = table.Column<int>(type: "int", nullable: false),
+                    quantity = table.Column<int>(type: "int", nullable: false),
+                    transaction_type = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    is_available = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    category_id = table.Column<int>(type: "int", nullable: false)
+                    timestamp = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_menu_items", x => x.id);
+                    table.PrimaryKey("PK_inventory_transaction", x => x.id);
                     table.ForeignKey(
-                        name: "FK_menu_items_categories_category_id",
-                        column: x => x.category_id,
-                        principalTable: "categories",
+                        name: "FK_inventory_transaction_inventories_inventory_id",
+                        column: x => x.inventory_id,
+                        principalTable: "inventories",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -150,13 +167,14 @@ namespace RestaurantManagementSystem.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     full_name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    email = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                    email = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     phone = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    role_id = table.Column<int>(type: "int", nullable: true)
+                    role_id = table.Column<int>(type: "int", nullable: true),
+                    status = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -165,65 +183,6 @@ namespace RestaurantManagementSystem.Migrations
                         name: "FK_users_roles_role_id",
                         column: x => x.role_id,
                         principalTable: "roles",
-                        principalColumn: "id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "file_uploads",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    menu_item_id = table.Column<int>(type: "int", nullable: true),
-                    name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    path = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    location = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    file_type = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    category_id = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_file_uploads", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_file_uploads_categories_category_id",
-                        column: x => x.category_id,
-                        principalTable: "categories",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_file_uploads_menu_items_menu_item_id",
-                        column: x => x.menu_item_id,
-                        principalTable: "menu_items",
-                        principalColumn: "id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "inventories",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    item_name = table.Column<string>(type: "text", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    quantity = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
-                    unit = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    min_threshold = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
-                    last_updated = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    MenuItemId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_inventories", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_inventories_menu_items_MenuItemId",
-                        column: x => x.MenuItemId,
-                        principalTable: "menu_items",
                         principalColumn: "id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -294,18 +253,18 @@ namespace RestaurantManagementSystem.Migrations
                 name: "shift_assignment",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     shift_id = table.Column<int>(type: "int", nullable: false),
                     user_id = table.Column<int>(type: "int", nullable: false),
-                    assigned_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    work_date = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     actual_start_time = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     actual_end_time = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     hours_worked = table.Column<decimal>(type: "decimal(18,3)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_shift_assignment", x => x.id);
+                    table.PrimaryKey("PK_shift_assignment", x => new { x.shift_id, x.user_id });
                     table.ForeignKey(
                         name: "FK_shift_assignment_shifts_shift_id",
                         column: x => x.shift_id,
@@ -316,60 +275,6 @@ namespace RestaurantManagementSystem.Migrations
                         name: "FK_shift_assignment_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "inventory_transaction",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    inventory_id = table.Column<int>(type: "int", nullable: false),
-                    quantity = table.Column<int>(type: "int", nullable: false),
-                    transaction_type = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    timestamp = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_inventory_transaction", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_inventory_transaction_inventories_inventory_id",
-                        column: x => x.inventory_id,
-                        principalTable: "inventories",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "order_items",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    order_id = table.Column<int>(type: "int", nullable: false),
-                    menu_item_id = table.Column<int>(type: "int", nullable: false),
-                    quantity = table.Column<int>(type: "int", nullable: false),
-                    subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    added_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_order_items", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_order_items_menu_items_menu_item_id",
-                        column: x => x.menu_item_id,
-                        principalTable: "menu_items",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_order_items_orders_order_id",
-                        column: x => x.order_id,
-                        principalTable: "orders",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -458,6 +363,108 @@ namespace RestaurantManagementSystem.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "categories",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    description = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    file_upload_id = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_categories", x => x.id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "menu_items",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    product_name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    description = table.Column<string>(type: "text", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    is_available = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    category_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_menu_items", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_menu_items_categories_category_id",
+                        column: x => x.category_id,
+                        principalTable: "categories",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "file_uploads",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    menu_item_id = table.Column<int>(type: "int", nullable: true),
+                    name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    path = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    location = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    file_type = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_file_uploads", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_file_uploads_menu_items_menu_item_id",
+                        column: x => x.menu_item_id,
+                        principalTable: "menu_items",
+                        principalColumn: "id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "order_items",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    order_id = table.Column<int>(type: "int", nullable: false),
+                    menu_item_id = table.Column<int>(type: "int", nullable: false),
+                    quantity = table.Column<int>(type: "int", nullable: false),
+                    subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    added_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_order_items", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_order_items_menu_items_menu_item_id",
+                        column: x => x.menu_item_id,
+                        principalTable: "menu_items",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_order_items_orders_order_id",
+                        column: x => x.order_id,
+                        principalTable: "orders",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "roles",
                 columns: new[] { "id", "name" },
@@ -469,20 +476,26 @@ namespace RestaurantManagementSystem.Migrations
                     { 4, "Customer" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "shifts",
+                columns: new[] { "id", "end_time", "name", "start_time", "status", "updated_at" },
+                values: new object[,]
+                {
+                    { 1, "12:00:00", "Day Shift", "08:00:00", "Active", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "17:00:00", "Afternoon Shift", "13:00:00", "Active", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, "22:00:00", "Night Shift", "17:00:00", "Active", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_file_uploads_category_id",
-                table: "file_uploads",
-                column: "category_id");
+                name: "IX_categories_file_upload_id",
+                table: "categories",
+                column: "file_upload_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_file_uploads_menu_item_id",
                 table: "file_uploads",
                 column: "menu_item_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_inventories_MenuItemId",
-                table: "inventories",
-                column: "MenuItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_inventory_transaction_inventory_id",
@@ -540,11 +553,6 @@ namespace RestaurantManagementSystem.Migrations
                 column: "table_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_shift_assignment_shift_id",
-                table: "shift_assignment",
-                column: "shift_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_shift_assignment_user_id",
                 table: "shift_assignment",
                 column: "user_id");
@@ -553,13 +561,24 @@ namespace RestaurantManagementSystem.Migrations
                 name: "IX_users_role_id",
                 table: "users",
                 column: "role_id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_categories_file_uploads_file_upload_id",
+                table: "categories",
+                column: "file_upload_id",
+                principalTable: "file_uploads",
+                principalColumn: "id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_categories_file_uploads_file_upload_id",
+                table: "categories");
+
             migrationBuilder.DropTable(
-                name: "file_uploads");
+                name: "InvalidTokens");
 
             migrationBuilder.DropTable(
                 name: "inventory_transaction");
@@ -598,16 +617,19 @@ namespace RestaurantManagementSystem.Migrations
                 name: "shifts");
 
             migrationBuilder.DropTable(
-                name: "menu_items");
-
-            migrationBuilder.DropTable(
                 name: "users");
 
             migrationBuilder.DropTable(
-                name: "categories");
+                name: "roles");
 
             migrationBuilder.DropTable(
-                name: "roles");
+                name: "file_uploads");
+
+            migrationBuilder.DropTable(
+                name: "menu_items");
+
+            migrationBuilder.DropTable(
+                name: "categories");
         }
     }
 }

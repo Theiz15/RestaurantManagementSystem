@@ -21,6 +21,15 @@ namespace RestaurantManagementSystem.Utils
         public const string CHANGE_PASSWORD = "/api/v1/auth/change-password";
         public const string FORGOT_PASSWORD = "/api/v1/auth/forgot-password";
 
+        // Shift routes
+        public const string CREATE_SHIFT_ASSIGNMENT = "/api/v1/shiftAssignment/create";
+        public const string CHECK_IN = "/api/v1/shiftAssignment/check-in/{assignmentId}";
+        public const string CHECK_OUT = "/api/v1/shiftAssignment/check-out/{assignmentId}";
+        public const string GET_ALL_SHIFT_ASSIGNMENT = "/api/v1/shiftAssignment/getAll";
+        public const string GET_ALL_SHIFT_ASSIGNMENT_BY_USER = "/api/v1/shiftAssignment/getAll/{userId}";
+        public const string FILTER_SHIFT_ASSIGNMENT = "/api/v1/shiftAssignment/getAllComplete";
+        public const string GET_SHIFT_ASSIGNMENT = "/api/v1/shiftAssignment/{userId}";
+        public const string CANCELED_SHIFT_ASSIGNMENT = "/api/v1/shiftAssignment/delete/{userId}/{assignmentId}";
 
         // Category routes
         public const string CREATE_CATEGORY = "/api/v1/categories";

@@ -11,5 +11,7 @@ namespace RestaurantManagementSystem.Repositories
         Task DeleteAsync(User user);
 
         Task<User> GetUserByEmailAsync(string email);
+
+        Task<User> FindByIdAsync(int id);
     }
 }
