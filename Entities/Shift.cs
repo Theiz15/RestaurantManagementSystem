@@ -11,13 +11,16 @@ namespace RestaurantManagementSystem.Models
         [Column("id")]
         public int Id { get; set; }
 
+        [Column("name")]
+        public string? Name { get; set; }
+
         [Required]
         [Column("start_time")]
-        public DateTime StartTime { get; set; }
+        public TimeSpan StartTime { get; set; }
 
         [Required]
         [Column("end_time")]
-        public DateTime EndTime { get; set; }
+        public TimeSpan EndTime { get; set; }
 
         [Required]
         [Column("status")]
@@ -25,10 +28,6 @@ namespace RestaurantManagementSystem.Models
 
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
-
-        [Required]
-        [Column("shift_date")]
-        public DateTime ShiftDate { get; set; }
 
         public ICollection<ShiftAssignment> ShiftAssignments { get; set; } = new List<ShiftAssignment>();
     }

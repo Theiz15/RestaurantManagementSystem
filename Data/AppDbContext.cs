@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantManagementSystem.Models;
 using RestaurantManagementSystem.Enums;
-using RestaurantManagementSystem.Entities; // Đảm bảo đã include Enums
+using RestaurantManagementSystem.Entities;
+using Org.BouncyCastle.Asn1.Cms; // Đảm bảo đã include Enums
 
 namespace RestaurantManagementSystem.Data
 {
@@ -11,7 +12,7 @@ namespace RestaurantManagementSystem.Data
         {
         }
 
-        // DbSets cho tất cả các Models của bạn
+        // DbSets for each entity
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Shift> Shifts { get; set; }
@@ -67,10 +68,37 @@ namespace RestaurantManagementSystem.Data
                 .HasForeignKey(p => p.CashierId)
                 .IsRequired(false); // Cashier có thể null nếu thanh toán tự động, v.v.
 
+            // Setting for shift assignment for many-to-many between User and Shift
+            modelBuilder.Entity<ShiftAssignment>()
+                .HasKey(sa => new { sa.ShiftId, sa.UserId });
+            modelBuilder.Entity<ShiftAssignment>()
+                .HasOne(sa => sa.Shift)
+                .WithMany(s => s.ShiftAssignments)
+                .HasForeignKey(sa => sa.ShiftId);
+            modelBuilder.Entity<ShiftAssignment>()
+                .HasOne(sa => sa.User)
+                .WithMany(u => u.ShiftAssignments)
+                .HasForeignKey(sa => sa.UserId);
+
+
             // Chuyển đổi Enum sang chuỗi khi lưu vào DB (hoặc int tùy chọn)
             modelBuilder.Entity<Shift>()
                 .Property(s => s.Status)
                 .HasConversion<string>();
+
+            modelBuilder.Entity<Shift>()
+                .Property(s => s.StartTime)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => TimeSpan.Parse(v)
+                );
+
+            modelBuilder.Entity<Shift>()
+                .Property(s => s.EndTime)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => TimeSpan.Parse(v)
+                );
 
             modelBuilder.Entity<Table>()
                 .Property(t => t.Status)
@@ -105,6 +133,12 @@ namespace RestaurantManagementSystem.Data
                 new Role { Id = 2, Name = "Manager" },
                 new Role { Id = 3, Name = "Staff" },
                 new Role { Id = 4, Name = "Customer" }
+            );
+
+            modelBuilder.Entity<Shift>().HasData(
+                new Shift {Id = 1, Name = "Day Shift", StartTime = new TimeSpan(8, 0, 0), EndTime = new TimeSpan(12, 0, 0), Status = ShiftStatus.Active},
+                new Shift {Id = 2, Name = "Afternoon Shift", StartTime = new TimeSpan(13, 0, 0), EndTime = new TimeSpan(17, 0, 0), Status = ShiftStatus.Active},
+                new Shift {Id = 3, Name = "Night Shift", StartTime = new TimeSpan(17, 0, 0), EndTime = new TimeSpan(22, 0, 0), Status = ShiftStatus.Active} 
             );
 
         }

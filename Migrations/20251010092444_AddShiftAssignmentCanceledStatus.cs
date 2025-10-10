@@ -5,14 +5,14 @@
 namespace RestaurantManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class users : Migration
+    public partial class AddShiftAssignmentCanceledStatus : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
                 name: "status",
-                table: "users",
+                table: "shift_assignment",
                 type: "int",
                 nullable: true);
         }
@@ -22,7 +22,7 @@ namespace RestaurantManagementSystem.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "status",
-                table: "users");
+                table: "shift_assignment");
         }
     }
 }

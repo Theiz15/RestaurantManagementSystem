@@ -21,6 +21,12 @@ namespace RestaurantManagementSystem.Repositories
             return await _context.Users.AnyAsync(u => u.Username == username);
         }
 
+        public async Task<User?> FindByIdAsync(int id)
+        {
+            return await _context.Users
+                                 .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
 
         public async Task UpdateAsync(User user)
         {

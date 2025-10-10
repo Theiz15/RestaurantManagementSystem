@@ -11,9 +11,15 @@ namespace RestaurantManagementSystem.Mappings
     {
         public MappingProfile()
         {
+            // DTO -> Entity
             CreateMap<UserCreateDTO, User>();
+            CreateMap<ShiftAssignmentRequest, ShiftAssignment>();
+            
+            // Entity -> DTO
             CreateMap<User, UserResponse>()
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role != null ? src.Role.Name : null));
+            CreateMap<ShiftAssignment, ShiftAssignmentResponse>();    
+            // For updating
             CreateMap<UserUpdateDTO, User>();
 
             // Từ Entity sang DTO

@@ -53,7 +53,6 @@ namespace RestaurantManagementSystem.Controllers
                 Result = _mapper.Map<UserResponse>(user)
             };
             return Ok(response);
-
         }
 
         // GET ALL USERS
