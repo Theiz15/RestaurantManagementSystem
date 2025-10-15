@@ -6,6 +6,7 @@
         CreditCard,
         DebitCard,
         MobilePayment,
-        BankTransfer
+        BankTransfer,
+        VNPay
     }
 }

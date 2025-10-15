@@ -62,11 +62,11 @@ namespace RestaurantManagementSystem.Data
                 .HasForeignKey(op => op.PromotionId);
 
             // Quan hệ 1-nhiều giữa User và Payment (Cashier)
-            modelBuilder.Entity<Payment>()
-                .HasOne(p => p.Cashier)
-                .WithMany(u => u.Payments)
-                .HasForeignKey(p => p.CashierId)
-                .IsRequired(false); // Cashier có thể null nếu thanh toán tự động, v.v.
+            // modelBuilder.Entity<Payment>()
+            //     .HasOne(p => p.Cashier)
+            //     .WithMany(u => u.Payments)
+            //     .HasForeignKey(p => p.CashierId)
+            //     .IsRequired(false); // Cashier có thể null nếu thanh toán tự động, v.v.
 
             // Setting for shift assignment for many-to-many between User and Shift
             modelBuilder.Entity<ShiftAssignment>()
@@ -118,7 +118,11 @@ namespace RestaurantManagementSystem.Data
 
             modelBuilder.Entity<Payment>()
                 .Property(p => p.PaymentMethod)
-                .HasConversion<string>();
+                .HasConversion<string>(); 
+
+            modelBuilder.Entity<Payment>()
+                .HasIndex(p => p.OrderId)
+                .IsUnique(false);    
 
             modelBuilder.Entity<InventoryTransaction>()
                 .Property(it => it.TransactionType)

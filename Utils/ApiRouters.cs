@@ -21,6 +21,10 @@ namespace RestaurantManagementSystem.Utils
         public const string CHANGE_PASSWORD = "/api/v1/auth/change-password";
         public const string FORGOT_PASSWORD = "/api/v1/auth/forgot-password";
 
+        //Payment routes
+        public const string CREATE_VNPAY_PAYMENT = "/api/v1/payment/vnpay/create";
+        public const string CALL_BACK_VNPAY = "/api/v1/payment/vnpay/callback";
+
         // Shift routes
         public const string CREATE_SHIFT_ASSIGNMENT = "/api/v1/shiftAssignment/create";
         public const string CHECK_IN = "/api/v1/shiftAssignment/check-in/{assignmentId}";

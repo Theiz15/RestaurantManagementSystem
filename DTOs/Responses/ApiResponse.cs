@@ -10,4 +10,5 @@ public class ApiResponse<T>
 
     [JsonPropertyName("result")]
     public T? Result { get; set; }
+
 }

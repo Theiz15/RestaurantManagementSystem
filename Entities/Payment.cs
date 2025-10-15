@@ -14,9 +14,6 @@ namespace RestaurantManagementSystem.Models
         [Column("order_id")]
         public int OrderId { get; set; }
 
-        [Column("cashier_id")]
-        public int? CashierId { get; set; } // User who processed the payment
-
         [Required]
         [MaxLength(100)]
         [Column("payment_method")]
@@ -25,13 +22,19 @@ namespace RestaurantManagementSystem.Models
         [Column("amount_paid", TypeName = "decimal(10, 2)")]
         public decimal AmountPaid { get; set; }
 
-        [Column("timestamp")]
-        public DateTime Timestamp { get; set; }
+        [Column("status")]
+        public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
+
+        [MaxLength(100)]
+        public string? VnpTransactionNo { get; set; }
+
+        [MaxLength(10)]
+        public string? VnpResponseCode { get; set; }
+
+        public DateTime CreateAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
 
         [ForeignKey("OrderId")]
-        public Order Order { get; set; }
-
-        [ForeignKey("CashierId")]
-        public User Cashier { get; set; }
+        public Order? Order { get; set; }
     }
 }

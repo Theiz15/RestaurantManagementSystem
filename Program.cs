@@ -51,6 +51,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
 builder.Services.AddScoped<ShiftRepository>();
 builder.Services.AddScoped<ShiftAssignmentRepository>();
+builder.Services.AddScoped<PaymentRepository>();
 
 // Đăng ký Service
 builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
@@ -59,6 +60,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IMenuItemService, MenuItemServiceImpl>();
 builder.Services.AddScoped<ShiftAssignmentService, ShiftAssignmentServiceImpl>();
+builder.Services.AddScoped<IVnPayService, VnPayService>();
 
 builder.Services.AddScoped<AuthenticationService>();
 
@@ -69,6 +71,8 @@ builder.Services.AddScoped<AuthenticationService>();
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Lấy connection string từ appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddHttpContextAccessor();
+
 
 // Thêm DbContext và cấu hình MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
